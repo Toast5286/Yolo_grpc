@@ -6,11 +6,12 @@ import generic_box_pb2
 import generic_box_pb2_grpc
 import utils
 
+import yoloService as ys
 from ultralytics import YOLO
 
 class ServiceImpl(generic_box_pb2_grpc.GenericBoxServiceServicer):
 
-    def __init__(self, calling_function):
+    def __init__(self):
         """
         Args:
             calling_function: the function that should be called
@@ -23,10 +24,9 @@ class ServiceImpl(generic_box_pb2_grpc.GenericBoxServiceServicer):
                               as described in the process method
 
         """
-        self.__calling_fn = calling_function
         self.__model = YOLO("yolov8n.pt")
 
-    def process(self, request: generic_box_pb2.Data, context):
+    def predict(self, request: generic_box_pb2.Data, context):
         """Processes a given ImageWithPoses request
 
         It expects that a process function was already registered
@@ -44,9 +44,21 @@ class ServiceImpl(generic_box_pb2_grpc.GenericBoxServiceServicer):
             The Image with the applied function
 
         """
-        image = request.file
+        image = request.file.data
         model = self.__model
-        return self.__calling_fn(image,model)
+        return ys.predict(image,model)
+    
+    def track(self, request: generic_box_pb2.Data, context):
+
+        image = request.file.data
+        model = self.__model
+        return ys.track(image,model)
+    
+    def plot(self, request: generic_box_pb2.Data, context):
+
+        pickleFile = request.data
+        return ys.plot(pickleFile)
+    
 
 def grpc_server():
     logging.basicConfig(
@@ -54,13 +66,9 @@ def grpc_server():
         datefmt='%Y-%m-%d %H:%M:%S',
         level=logging.INFO)
 
-    calling_fn = utils.get_calling_function()
-    if not calling_fn:
-        exit(1)
-
     server = grpc.server(futures.ThreadPoolExecutor())
     generic_box_pb2_grpc.add_GenericBoxServiceServicer_to_server(
-        ServiceImpl(calling_fn),
+        ServiceImpl(),
         server)
 
     # Add reflection
