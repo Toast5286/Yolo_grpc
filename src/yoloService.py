@@ -21,7 +21,7 @@ def predict(datafile,model):
     
     bytesData = pickle.dumps(yoloResults)
 
-    return generic_box_pb2.File(data=bytesData)
+    return generic_box_pb2.Data(file=bytesData)
 
 def YOLOPredict(img,model):
 
@@ -45,7 +45,7 @@ def track(datafile,model):
     
     bytesData = pickle.dumps(yoloResults)
 
-    return generic_box_pb2.File(data=bytesData)
+    return generic_box_pb2.Data(file=bytesData)
 
 
 def YOLOTrack(img,model):
@@ -70,7 +70,7 @@ def plot(results):
     imgMatFile = saveBinaryMat(tempDic)
 
 
-    return generic_box_pb2.File(data = imgMatFile)
+    return generic_box_pb2.Data(file = imgMatFile)
 
 def YOLOImage(results):
 
