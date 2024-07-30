@@ -44,20 +44,22 @@ class ServiceImpl(generic_box_pb2_grpc.GenericBoxServiceServicer):
             The Image with the applied function
 
         """
-        image = request.file
+        file = request.file
         model = self.__model
-        return ys.predict(image,model)
+        return ys.predict(file,model)
     
     def track(self, request: generic_box_pb2.Data, context):
 
-        image = request.file
+        file = request.file
         model = self.__model
-        return ys.track(image,model)
+        return ys.track(file,model)
     
-    def plot(self, request: generic_box_pb2.Data, context):
+    def plot(self, request: generic_box_pb2.PlotInfo, context):
 
-        pickleFile = request.file
-        return ys.plot(pickleFile)
+        img = request.img.file
+        data = request.file.file
+        model = self.__model
+        return ys.plot(img,data,model)
     
 
 def grpc_server():
