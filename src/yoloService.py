@@ -3,6 +3,7 @@ from scipy.io import savemat, loadmat
 import cv2  #install opencv-python and opencv-contrib-python
 import generic_box_pb2
 import numpy as np
+import os
 
 from PIL import Image
 import matplotlib.pyplot as plt
@@ -74,11 +75,16 @@ def plot(im,data,model):
 
     dados = PickleData[list(PickleData)[-1]]
 
+    if dados['cls'][0][0][0] == 'no detections':
+        # Save the numpy array to a .mat file
+        imgMatFile = saveBinaryMat({'im0': img})
+
+        return generic_box_pb2.Data(file = imgMatFile)
 
     # Extract relevant data from the dictionary
     xyxy = dados['xyxy'][0][0]  # Bounding boxes in (x1, y1, x2, y2) format
     conf = dados['conf'][0][0][0]  # Confidence scores
-    cls = dados['cls'][0][0][0]    # Class indices (assumed to be integer class indices)
+    cls = dados['cls'][0][0][0]     # Class indices (assumed to be integer class indices)
 
     # Define class names (update this list according to your dataset)
     class_names = model.names  # Replace with actual class names if available
@@ -131,6 +137,7 @@ def saveResultsToMat(results,franeNum):
         
         #Make sure there was something detected
         if len(result.boxes.cls.cpu().numpy())<1:
+            dataDic['cls'] = np.array([[['no detections']]])
             break
 
         dataDic['cls'] = result.boxes.cls.cpu().numpy()
@@ -156,8 +163,9 @@ def saveResultsToMat(results,franeNum):
 
 def saveBinaryMat(dic):
     #save mat file and open it as binary
-    savemat("data.mat",dic,long_field_names=True)
-    with open("data.mat", 'rb') as fp:
+    savemat(str(list(dic)[-1])+"data.mat",dic,long_field_names=True)
+    with open(str(list(dic)[-1])+"data.mat", 'rb') as fp:
         bytesData = fp.read()
+    os.remove(str(list(dic)[-1])+"data.mat")
 
     return bytesData
