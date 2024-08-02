@@ -85,6 +85,7 @@ def plot(im,data,model):
     xyxy = dados['xyxy'][0][0]  # Bounding boxes in (x1, y1, x2, y2) format
     conf = dados['conf'][0][0][0]  # Confidence scores
     cls = dados['cls'][0][0][0]     # Class indices (assumed to be integer class indices)
+    ids = dados['id'][0][0][0]
 
     # Define class names (update this list according to your dataset)
     class_names = model.names  # Replace with actual class names if available
@@ -105,6 +106,8 @@ def plot(im,data,model):
         
         # Label with class and confidence
         label = f"{class_names[int(cls[i])]}: {conf[i]:.2f}"
+        if not ids=='None':
+           label+=f", ID: {int(ids[i])}"
         plt.text(x1, y1 - 10, label, color='white', fontsize=8, bbox=dict(facecolor='red', alpha=0.5))
 
     plt.axis('off')
@@ -148,7 +151,7 @@ def saveResultsToMat(results,franeNum):
         if result.boxes.id != None:
             dataDic['id'] = result.boxes.id.numpy()
         else:
-            dataDic['id'] = 'None'
+            dataDic['id'] = ['None']
 
         dataDic['is_track'] = result.boxes.is_track
         dataDic['orig_shape'] = result.boxes.orig_shape
