@@ -68,8 +68,8 @@ COPY --from=builder --chown=${USER}:${GROUP} ${WORKSPACE}/*.py ${WORKSPACE}/
 # (rename service file to only service.py for generic usage)
 COPY --chown=${USER}:${GROUP} ${SRC}/utils.py ${WORKSPACE}/utils.py
 # ---- THIS IS THE SAME FILENAME AS DEFINED IN utils.py 
-COPY --chown=${USER}:${GROUP} ${SRC}/yoloService.py ${WORKSPACE}/yoloService.py
-COPY --chown=${USER}:${GROUP} ${SRC}/yolov8n.pt ${WORKSPACE}/yolov8n.pt
+COPY --chown=${USER}:${GROUP} ${SRC}/external.py ${WORKSPACE}/external.py
+COPY --chown=${USER}:${GROUP} ${SRC}/Gradio_service.py ${WORKSPACE}/Gradio_service.py
 COPY --chown=${USER}:${GROUP} ${SRC}/${SERVICE_NAME}_service.py ${WORKSPACE}/service.py
 
 # Change to non-privileged user

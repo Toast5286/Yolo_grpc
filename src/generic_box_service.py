@@ -6,12 +6,14 @@ import generic_box_pb2
 import generic_box_pb2_grpc
 import utils
 
-import yoloService as ys
-from ultralytics import YOLO
+import threading
+import asyncio
+from Gradio_service import gradio_function
+
 
 class ServiceImpl(generic_box_pb2_grpc.GenericBoxServiceServicer):
 
-    def __init__(self):
+    def __init__(self,display_function,submit_function,cleanup_function):
         """
         Args:
             calling_function: the function that should be called
@@ -24,9 +26,11 @@ class ServiceImpl(generic_box_pb2_grpc.GenericBoxServiceServicer):
                               as described in the process method
 
         """
-        self.__model = YOLO("yolov8n.pt")
+        self.__display_fn = display_function
+        self.__submit_fn = submit_function
+        self.__cleanup_fn = cleanup_function
 
-    def predict(self, request: generic_box_pb2.Data, context):
+    def display(self, request: generic_box_pb2.PlotInfo, context):
         """Processes a given ImageWithPoses request
 
         It expects that a process function was already registered
@@ -44,23 +48,33 @@ class ServiceImpl(generic_box_pb2_grpc.GenericBoxServiceServicer):
             The Image with the applied function
 
         """
-        file = request.file
-        model = self.__model
-        return ys.predict(file,model)
+        image = request.img.file
+        matFile = request.file.file
+        self.__display_fn(image,matFile)
+        return generic_box_pb2.Empty()
     
-    def track(self, request: generic_box_pb2.Data, context):
+    def submit(self, request: generic_box_pb2.Empty, context):
+        """Processes a given ImageWithPoses request
 
-        file = request.file
-        model = self.__model
-        return ys.track(file,model)
-    
-    def plot(self, request: generic_box_pb2.PlotInfo, context):
+        It expects that a process function was already registered
+        with the following signature
 
-        img = request.img.file
-        data = request.file.file
-        model = self.__model
-        return ys.plot(img,data,model)
-    
+        (image: bytes) -> bytes
+
+        Image is the bytes of the image to process.
+
+        Args:
+            request: The ImageWithPoses request to process
+            context: Context of the gRPC call
+
+        Returns:
+            The Image with the applied function
+
+        """
+        result = self.__submit_fn()
+        #Clear submit direcory
+        self.__cleanup_fn("Sub",0)
+        return result
 
 def grpc_server():
     logging.basicConfig(
@@ -68,9 +82,15 @@ def grpc_server():
         datefmt='%Y-%m-%d %H:%M:%S',
         level=logging.INFO)
 
+    display_function = utils.get_calling_function('display')
+    submit_function = utils.get_calling_function('submit')
+    cleanup_function = utils.get_calling_function('cleanup')
+    if not display_function or not submit_function or not cleanup_function:
+        exit(1)
+
     server = grpc.server(futures.ThreadPoolExecutor())
     generic_box_pb2_grpc.add_GenericBoxServiceServicer_to_server(
-        ServiceImpl(),
+        ServiceImpl(display_function,submit_function,cleanup_function),
         server)
 
     # Add reflection
@@ -81,7 +101,15 @@ def grpc_server():
     grpc_reflection.enable_server_reflection(service_names, server)
 
     utils.run_server(server)
+
+async def main():
+    grpc_thread = threading.Thread(target=grpc_server)
+    grpc_thread.start()
+
+    # Launch Gradio in the main thread as it's non-blocking
+    await gradio_function()
+
         
 
 if __name__ == '__main__':
-    grpc_server()
+    asyncio.run(main())

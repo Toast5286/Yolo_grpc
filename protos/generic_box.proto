@@ -6,12 +6,9 @@ syntax = "proto3";
  * :returns: The transformed data
  */
 service GenericBoxService {
-    rpc predict(Data) returns (Data);
-    rpc track(Data) returns (Data);
-    rpc plot(PlotInfo) returns (Data);
+    rpc display(PlotInfo) returns (Empty);
+    rpc submit(Empty) returns (Data);
 }
-
-
 
 /*
  * Message to represent the data file

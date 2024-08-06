@@ -15,6 +15,7 @@ _PORT_DEFAULT = 8061
 #DEFINE THE FUNCTION IN MODULE TO RUN (Default calling_function)
 _CALLING_FUNCTION_NAME = 'calling_function'
 
+
 _ONE_DAY_IN_SECONDS = 60 * 60 * 24
 
 
@@ -82,7 +83,7 @@ def get_calling_function_from_module(module, name):
         return None
 
 
-def get_calling_function():
+def get_calling_function(function_name):
     """Defines generic properties for the server to run
 
     Returns:
@@ -94,8 +95,7 @@ def get_calling_function():
     if not module:
         return None
 
-    return get_calling_function_from_module(module, _CALLING_FUNCTION_NAME)
-
+    return get_calling_function_from_module(module, function_name)
 
 def run_server(server):
     """Run the given server on the port defined
