@@ -77,7 +77,7 @@ def plot(im,data,model):
 
     if dados['cls'][0][0][0] == 'no detections':
         # Save the numpy array to a .mat file
-        imgMatFile = saveBinaryMat({'im0': img})
+        imgMatFile = saveBinaryMat({'im': img})
 
         return generic_box_pb2.Data(file = imgMatFile)
 
@@ -122,7 +122,7 @@ def plot(im,data,model):
     buf_array = np.array(buf_image)
 
     # Save the numpy array to a .mat file
-    imgMatFile = saveBinaryMat({'im0': buf_array})
+    imgMatFile = saveBinaryMat({'im': buf_array})
 
     # Close the plot
     plt.close(fig)
@@ -143,9 +143,9 @@ def saveResultsToMat(results,franeNum):
             dataDic['cls'] = np.array([[['no detections']]])
             break
 
-        dataDic['cls'] = result.boxes.cls.cpu().numpy()
-        dataDic['conf'] = result.boxes.conf.cpu().numpy()
-        dataDic['data'] = result.boxes.data.cpu().numpy()
+        dataDic['cls'] = np.array(result.boxes.cls.cpu().numpy())
+        dataDic['conf'] = np.array(result.boxes.conf.cpu().numpy())
+        dataDic['data'] = np.array(result.boxes.data.cpu().numpy())
 
         #In the case of Predict, the id is None
         if result.boxes.id != None:
@@ -155,12 +155,14 @@ def saveResultsToMat(results,franeNum):
 
         dataDic['is_track'] = result.boxes.is_track
         dataDic['orig_shape'] = result.boxes.orig_shape
-        dataDic['xywh'] = result.boxes.xywh.cpu().numpy()
-        dataDic['xywhn'] = result.boxes.xywhn.cpu().numpy()
-        dataDic['xyxy'] = result.boxes.xyxy.cpu().numpy()
-        dataDic['xyxyn'] = result.boxes.xyxyn.cpu().numpy()
+        dataDic['xywh'] = np.array(result.boxes.xywh.cpu().numpy())
+        dataDic['xywhn'] = np.array(result.boxes.xywhn.cpu().numpy())
+        dataDic['xyxy'] = np.array(result.boxes.xyxy.cpu().numpy())
+        dataDic['xyxyn'] = np.array(result.boxes.xyxyn.cpu().numpy())
 
-    MatDic={'frame_'+str(int(franeNum)):dataDic}
+    print(dataDic)
+
+    MatDic={'frame_'+ f'{int(franeNum):05d}':dataDic}
     return saveBinaryMat(MatDic)
 
 
