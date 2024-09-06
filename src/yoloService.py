@@ -69,6 +69,8 @@ def plot(im,data,model):
     # Read data from mat file
     imdata = loadmat(io.BytesIO(im)) 
     img = imdata['im']
+    session_hash = imdata['session_hash']
+
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     img = cv2.resize(img,(640,369))
     PickleData = loadmat(io.BytesIO(data)) 
@@ -77,7 +79,7 @@ def plot(im,data,model):
 
     if dados['cls'][0][0][0] == 'no detections':
         # Save the numpy array to a .mat file
-        imgMatFile = saveBinaryMat({'im': img})
+        imgMatFile = saveBinaryMat({'im': img,'session_hash':session_hash})
 
         return generic_box_pb2.Data(file = imgMatFile)
 
@@ -122,7 +124,7 @@ def plot(im,data,model):
     buf_array = np.array(buf_image)
 
     # Save the numpy array to a .mat file
-    imgMatFile = saveBinaryMat({'im': buf_array})
+    imgMatFile = saveBinaryMat({'im': buf_array,'session_hash':session_hash})
 
     # Close the plot
     plt.close(fig)
