@@ -77,7 +77,7 @@ def plot(im,data,model):
 
     dados = PickleData[list(PickleData)[-1]]
 
-    if dados['cls'][0][0][0] == 'no detections':
+    if dados['cls'][0][0][0][0] == -1:
         # Save the numpy array to a .mat file
         imgMatFile = saveBinaryMat({'im': img,'session_hash':session_hash})
 
@@ -142,7 +142,7 @@ def saveResultsToMat(results,franeNum):
         
         #Make sure there was something detected
         if len(result.boxes.cls.cpu().numpy())<1:
-            dataDic['cls'] = np.array([[['no detections']]])
+            dataDic['cls'] = np.array([[-1]], dtype=np.float32)
             break
 
         dataDic['cls'] = np.array(result.boxes.cls.cpu().numpy())
