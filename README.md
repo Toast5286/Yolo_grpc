@@ -39,7 +39,7 @@ To run the container run the command:
 
 The output file follows the structure shown:
 
-```bash
+```
 fileName.mat 	 (dictionary)
 └──"frame_0000i" (dictionary)
      ├── "cls"	 (array)
