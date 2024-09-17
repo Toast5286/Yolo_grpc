@@ -39,6 +39,7 @@ To run the container run the command:
 
 The output file follows the structure shown:
 
+```bash
 fileName.mat 	 (dictionary)
 └──"frame_0000i" (dictionary)
      ├── "cls"	 (array)
@@ -94,3 +95,4 @@ fileName.mat 	 (dictionary)
           └── wrapper
         	├── numpy array containing a vector for each detected object with the top left corner's coordenate and bottom right corner's coordenate normalized;		(numpy array)
         	└── type of variable that the numpy array contains;														(dtype)
+'''
