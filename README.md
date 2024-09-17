@@ -33,3 +33,64 @@ To run the container run the command:
 ```bash
     docker run -p 8061:8061 -it --rm yolo_grpc
 ```
+
+
+## .Mat Output File
+
+The output file follows the structure shown:
+
+fileName.mat 	 (dictionary)
+└──"frame_0000i" (dictionary)
+     ├── "cls"	 (array)
+     │    └── wrapper
+     │  	├── numpy array containing the detected object's class; 		(numpy array)
+     │  	└── type of variable that the numpy array contains;			(dtype)
+     │
+     ├── "conf"	 (array)
+     │    └── wrapper
+     │  	├── numpy array containing the detected object's confudence level;	(numpy array)
+     │  	└── type of variable that the numpy array contains;			(dtype)
+     │
+     ├── "id"	(array)
+     │    └── wrapper
+     │  	├── numpy array containing the detected object's ids;			(numpy array)
+     │  	└── type of variable that the numpy array contains;			(dtype)
+     │
+     ├── "id"	(array)
+     │    └── wrapper
+     │  	├── numpy array containing the detected object's ids;			(numpy array)
+     │  	└── type of variable that the numpy array contains;			(dtype)
+     │
+     ├── "data"(array)
+     │    └── wrapper
+     │  	├── numpy array containing the raw tensor with detection boxes and associated data;	(numpy array)
+     │  	└── type of variable that the numpy array contains;					(dtype)
+     ├── "is_track" (array)
+     │    └── wrapper
+     │  	├── numpy array containing a 1 if tracking is on and 0 if else;				(numpy array)
+     │  	└── type of variable that the numpy array contains;					(dtype)
+     │
+     ├── "orig_shape"	(array)
+     │    └── wrapper
+     │  	├── numpy array containing an array containing the original image shape;		(numpy array)
+     │  	└── type of variable that the numpy array contains;					(dtype)
+     │
+     ├── "xywh"	(array)
+     │    └── wrapper
+     │  	├── numpy array containing a vector for each detected object with the center point's coordenates and the width and hight of the respective rectangle;		(numpy array)
+     │  	└── type of variable that the numpy array contains;														(dtype)
+     │
+     ├── "xywhn"	(array)
+     │    └── wrapper
+     │  	├── numpy array containing a vector for each detected object with the center point's coordenates and the width and hight of the respective rectangle normalized;(numpy array)
+     │  	└── type of variable that the numpy array contains;														(dtype)
+     │
+     ├── "xyxy"	(array)
+     │    └── wrapper
+     │  	├── numpy array containing a vector for each detected object with the top left corner's coordenate and bottom right corner's coordenate;			(numpy array)
+     │  	└── type of variable that the numpy array contains;														(dtype)
+     │
+     └── "xyxyn" (array)
+          └── wrapper
+        	├── numpy array containing a vector for each detected object with the top left corner's coordenate and bottom right corner's coordenate normalized;		(numpy array)
+        	└── type of variable that the numpy array contains;														(dtype)
