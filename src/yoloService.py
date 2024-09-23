@@ -12,8 +12,16 @@ import matplotlib.patches as patches
 YOLO_CONFIG_DIR = ""
 
 #----YOLO_Predict---------------------------------
-
 def predict(datafile,model):
+    '''
+    * Function:     predict
+    * Arguments:    datafile (binary .mat file)                 -.mat file containing the image in 'im'(int) and frame number in 'frame'(int). It must have these elements.
+    *               model (yolo model)                          -Model loaded to run the prediction funtion
+    *               
+    * Returns:      generic_box_pb2.Data (grpc binary message)  -grpc message containing the .mat file with yolo's prediction
+    *
+    * Description:  Runs predict function from the yolo model (from model variable) with the input image from datafile (binary .mat file). Used as the method function.
+    '''
     # Read data from mat file
     dados = loadmat(io.BytesIO(datafile)) 
     img = dados['im']
@@ -29,16 +37,33 @@ def predict(datafile,model):
     return generic_box_pb2.Data(file=DataMat)
 
 def YOLOPredict(img,model):
-
+    '''
+    * Function:     YOLOPredict
+    * Arguments:    img                                         -Image array containing the image to analyse
+    *               model (yolo model)                          -Model loaded to run the prediction funtion
+    *               
+    * Returns:      results (yolo results)                      -yolo Tuple with all the predict's results. 
+    *                                                           Check https://docs.ultralytics.com/reference/engine/results/#ultralytics.engine.results.Results for details on result's structure.
+    *
+    * Description:  Runs predict function from the yolo model (from model variable) with the input image from img
+    '''
     image = cv2.resize(img,(640,369))
-    # Run YOLOv8 tracking on the frame, persisting tracks between frames
+    # Run YOLOv8 prediction on the frame
     results = model.predict(image)
 
     return results
 
 #----YOLO_Track---------------------------------
-
 def track(datafile,model):
+    '''
+    * Function:     track
+    * Arguments:    datafile (binary .mat file)                 -.mat file containing the image in 'im'(int) and frame number in 'frame'(int). It must have these elements.
+    *               model (yolo model)                          -Model loaded to run the traking funtion
+    *               
+    * Returns:      generic_box_pb2.Data (grpc binary message)  -grpc message containing the .mat file with yolo's traking
+    *
+    * Description:  Runs track function from the yolo model (from model variable) with the input image from datafile (binary .mat file). Used as the method function.
+    '''
     # Read data from mat file
     dados = loadmat(io.BytesIO(datafile)) 
     img = dados['im']
@@ -53,8 +78,17 @@ def track(datafile,model):
 
     return generic_box_pb2.Data(file=DataMat)
 
-
 def YOLOTrack(img,model):
+    '''
+    * Function:     YOLOTrack
+    * Arguments:    img                                         -Image array containing the image to analyse
+    *               model (yolo model)                          -Model loaded to run the traking funtion
+    *               
+    * Returns:      results (yolo results)                      -yolo Tuple with all the track's results. 
+    *                                                           Check https://docs.ultralytics.com/reference/engine/results/#ultralytics.engine.results.Results for details on result's structure.
+    *
+    * Description:  Runs track function from the yolo model (from model variable) with the input image from img
+    '''
 
     image = cv2.resize(img,(640,369))
     # Run YOLOv8 tracking on the frame, persisting tracks between frames
@@ -63,8 +97,23 @@ def YOLOTrack(img,model):
     return results
 
 #----YOLO_Plot---------------------------------
-
 def plot(im,data,model):
+    '''
+    * Function:     plot
+    * Arguments:    im (binary .mat file)                       -.mat file containing the image in 'im'(int) and the uses's session hash in 'session_hash'. It must have these elements.
+    *               data (binary .mat file)                     -.mat file containing the information form the yolo models.
+    *                                                             Must have 'cls' representing object's classes.
+    *                                                             If 'cls' is difrente from -1 (meaning yolo detected some object), this function expects to also have in the .mat file:
+    *                                                             'xyxy' -> The top left corner and bottom right corner coordenates of the rectangle that surrounds the object;
+    *                                                             'conf' -> The confidence that the yolo model has of the object's classification;
+    *                                                             'id'   -> The identifier of the object in case of tracking.
+    *                                                       
+    *               model (yolo model)                          -Model used for traking/predict, used to get the class names (might change depending on the model)
+    *               
+    * Returns:      generic_box_pb2.Data (grpc binary message)  -grpc message containing the .mat file with the ploted image
+    *
+    * Description:  Plots the resulting image from the data from yolo results and the original image. 
+    '''
 
     # Read data from mat file
     imdata = loadmat(io.BytesIO(im)) 
@@ -86,11 +135,11 @@ def plot(im,data,model):
     # Extract relevant data from the dictionary
     xyxy = dados['xyxy'][0][0]  # Bounding boxes in (x1, y1, x2, y2) format
     conf = dados['conf'][0][0][0]  # Confidence scores
-    cls = dados['cls'][0][0][0]     # Class indices (assumed to be integer class indices)
+    cls = dados['cls'][0][0][0]     # Class indices 
     ids = dados['id'][0][0][0]
 
-    # Define class names (update this list according to your dataset)
-    class_names = model.names  # Replace with actual class names if available
+    # Define class names
+    class_names = model.names
 
 
     # Display the image
@@ -136,6 +185,16 @@ def plot(im,data,model):
 #----Save Results To Mat---------------------------------
 
 def saveResultsToMat(results,franeNum):
+    '''
+    * Function:     saveResultsToMat
+    * Arguments:    results (yolo results)                 -yolo results outputed by the tracking and predict functions.
+    *               franeNum (int)                          -The number of the frame that this image comes from.
+    *               
+    * Returns:      saveBinaryMat(MatDic) (binary .mat file)  -binary .mat file containing all the necessary results from yolo results
+    *
+    * Description:  Creates a binary .mat file with all important information from yolo results.
+    '''
+
 
     dataDic={}
     for result in results:
@@ -169,6 +228,15 @@ def saveResultsToMat(results,franeNum):
 
 
 def saveBinaryMat(dic):
+    '''
+    * Function:     saveBinaryMat
+    * Arguments:    dic (dictionary)                 -dictionary to save in to the binary .mat file
+    *               
+    * Returns:      bytesData (binary .mat file)  -binary .mat file containing the dictionary
+    *
+    * Description:  Gets the binary data from  a .mat file containing the dinctionary dic
+    '''
+
     #save mat file and open it as binary
     savemat(str(list(dic)[-1])+"data.mat",dic,long_field_names=True)
     with open(str(list(dic)[-1])+"data.mat", 'rb') as fp:
