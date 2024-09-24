@@ -249,7 +249,7 @@ def saveResultsToMat(results,franeNum):
 
     print(dataDic)
 
-    MatDic={'frame_'+ f'{int(franeNum):05d}':dataDic}
+    MatDic={'data_'+ f'{int(franeNum):05d}':dataDic}
     return saveBinaryMat(MatDic)
 
 
