@@ -4,6 +4,7 @@ import cv2  #install opencv-python and opencv-contrib-python
 import generic_box_pb2
 import numpy as np
 import os
+import logging
 
 from PIL import Image
 import matplotlib.pyplot as plt
@@ -24,8 +25,14 @@ def predict(datafile,model):
     '''
     # Read data from mat file
     dados = loadmat(io.BytesIO(datafile)) 
+    if not ('im' in dados):
+        logging.exception(f'''[ERRO IN PREDICT: No image found in dictionary key 'im']''')
     img = dados['im']
-    frameNum = dados['frame']
+
+    if not ('frame' in dados):
+        frameNum = 0
+    else:
+        frameNum = dados['frame']
 
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB) 
 
@@ -66,8 +73,14 @@ def track(datafile,model):
     '''
     # Read data from mat file
     dados = loadmat(io.BytesIO(datafile)) 
+    if not ('im' in dados):
+        logging.exception(f'''[ERRO IN TRACK: No image found in dictionary key 'im']''')
     img = dados['im']
-    frameNum = dados['frame']
+    
+    if not ('frame' in dados):
+        frameNum = 0
+    else:
+        frameNum = dados['frame']
 
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB) 
 
@@ -117,26 +130,39 @@ def plot(im,data,model):
 
     # Read data from mat file
     imdata = loadmat(io.BytesIO(im)) 
+
+    if not ('im' in imdata):
+        logging.exception(f'''[ERRO IN PLOT: No image found in dictionary key 'im']''')
     img = imdata['im']
-    session_hash = imdata['session_hash']
+    
+    if not ('session_hash' in imdata):
+        session_hash = 0
+    else:
+        session_hash = imdata['session_hash']
 
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     img = cv2.resize(img,(640,369))
-    PickleData = loadmat(io.BytesIO(data)) 
+    Data = loadmat(io.BytesIO(data)) 
 
-    dados = PickleData[list(PickleData)[-1]]
+    dados = Data[list(Data)[-1]]
 
-    if dados['cls'][0][0][0][0] == -1:
+    if (dados['cls'][0][0][0][0] == -1):
         # Save the numpy array to a .mat file
         imgMatFile = saveBinaryMat({'im': img,'session_hash':session_hash})
 
         return generic_box_pb2.Data(file = imgMatFile)
 
     # Extract relevant data from the dictionary
-    xyxy = dados['xyxy'][0][0]  # Bounding boxes in (x1, y1, x2, y2) format
-    conf = dados['conf'][0][0][0]  # Confidence scores
-    cls = dados['cls'][0][0][0]     # Class indices 
-    ids = dados['id'][0][0][0]
+    try:
+        xyxy = dados['xyxy'][0][0]  # Bounding boxes in (x1, y1, x2, y2) format
+        conf = dados['conf'][0][0][0]  # Confidence scores
+        cls = dados['cls'][0][0][0]     # Class indices 
+        ids = dados['id'][0][0][0]
+    except:
+        logging.exception(f'''[WARNING IN PLOT: data from mat file did not have enough information for ploting. Returning empty image.]''')
+        # Save the numpy array to a .mat file
+        imgMatFile = saveBinaryMat({'im': img,'session_hash':session_hash})
+        return generic_box_pb2.Data(file = imgMatFile)
 
     # Define class names
     class_names = model.names

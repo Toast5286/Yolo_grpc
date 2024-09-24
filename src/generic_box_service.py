@@ -44,22 +44,34 @@ class ServiceImpl(generic_box_pb2_grpc.GenericBoxServiceServicer):
             The Image with the applied function
 
         """
-        file = request.file
-        model = self.__model
-        return ys.predict(file,model)
+        try:
+            file = request.file
+            model = self.__model
+            return ys.predict(file,model)
+        except:
+            logging.exception(f'''[ERRO IN PREDICT]''')
+            return generic_box_pb2.Empty()
     
     def track(self, request: generic_box_pb2.Data, context):
 
-        file = request.file
-        model = self.__model
-        return ys.track(file,model)
+        try:
+            file = request.file
+            model = self.__model
+            return ys.track(file,model)
+        except:
+            logging.exception(f'''[ERRO IN TRACK]''')
+            return generic_box_pb2.Empty()
     
     def plot(self, request: generic_box_pb2.PlotInfo, context):
 
-        img = request.img.file
-        data = request.file.file
-        model = self.__model
-        return ys.plot(img,data,model)
+        try:
+            img = request.img.file
+            data = request.file.file
+            model = self.__model
+            return ys.plot(img,data,model)
+        except:
+            logging.exception(f'''[ERRO IN PLOT]''')
+            return generic_box_pb2.Empty()
     
 
 def grpc_server():
