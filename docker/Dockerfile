@@ -77,9 +77,6 @@ USER ${USER}
 
 # Expose port 8061 according to ai4eu specifications
 EXPOSE 8061
-EXPOSE 7860
-
-ENV GRADIO_SERVER_NAME="0.0.0.0"
 
 WORKDIR ${WORKSPACE}
 
