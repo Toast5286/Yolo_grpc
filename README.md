@@ -14,53 +14,53 @@ It's output file has the following structure:
 fileName.mat 	 (dictionary)
    ├── "cls"	 (array)
    │    └── wrapper
-   │  	      ├── numpy array containing the detected object's class; 		(numpy array)
+   │  	      ├── numpy array containing the detected object's class; (numpy array)
    │          │   (if none where detected, shows -1)
-   │  	      └── type of variable that the numpy array contains;			    (dtype)
+   │  	      └── type of variable that the numpy array contains; (dtype)
    │
    ├── "conf"	 (array)
    │    └── wrapper
-   │  	      ├── numpy array containing the detected object's confudence level;	(numpy array)
-   │  	      └── type of variable that the numpy array contains;			            (dtype)
+   │  	      ├── numpy array containing the detected object's confudence level; (numpy array)
+   │  	      └── type of variable that the numpy array contains; (dtype)
    │
    ├── "id"	(array)
    │    └── wrapper
-   │  	      ├── numpy array containing the detected object's ids;			(numpy array)
-   │  	      └── type of variable that the numpy array contains;			  (dtype)
+   │  	      ├── numpy array containing the detected object's ids; (numpy array)
+   │  	      └── type of variable that the numpy array contains; (dtype)
    │
    ├── "data"(array)
    │    └── wrapper
-   │  	      ├── numpy array containing the raw tensor with detection boxes and associated data;	(numpy array)
-   │  	      └── type of variable that the numpy array contains;					                        (dtype)
+   │  	      ├── numpy array containing the raw tensor with detection boxes and associated data; (numpy array)
+   │  	      └── type of variable that the numpy array contains; (dtype)
    ├── "is_track" (array)
    │    └── wrapper
-   │  	      ├── numpy array containing 0;				                        (numpy array)
-   │  	      └── type of variable that the numpy array contains;					(dtype)
+   │  	      ├── numpy array containing 0; (numpy array)
+   │  	      └── type of variable that the numpy array contains; (dtype)
    │
    ├── "orig_shape"	(array)
    │    └── wrapper
-   │  	      ├── numpy array containing an array containing the original image shape;		(numpy array)
-   │  	      └── type of variable that the numpy array contains;					                (dtype)
+   │  	      ├── numpy array containing an array containing the original image shape; (numpy array)
+   │  	      └── type of variable that the numpy array contains; (dtype)
    │
    ├── "xywh"	(array)
    │    └── wrapper
-   │  	      ├── numpy array containing a vector for each detected object with the center point's coordenates and the width and hight of the respective rectangle;		(numpy array)
-   │  	      └── type of variable that the numpy array contains;													                                                                          	(dtype)
+   │  	      ├── numpy array containing a vector for each detected object with the center point's coordenates and the width and hight of the respective rectangle; (numpy array)
+   │  	      └── type of variable that the numpy array contains; (dtype)
    │
    ├── "xywhn"	(array)
    │    └── wrapper
-   │  	      ├── numpy array containing a vector for each detected object with the center point's coordenates and the width and hight of the respective rectangle normalized;(numpy array)
-   │  	      └── type of variable that the numpy array contains;													                                                                                  	(dtype)
+   │  	      ├── numpy array containing a vector for each detected object with the center point's coordenates and the width and hight of the respective rectangle normalized; (numpy array)
+   │  	      └── type of variable that the numpy array contains; (dtype)
    │
    ├── "xyxy"	(array)
    │    └── wrapper
-   │  	      ├── numpy array containing a vector for each detected object with the top left corner's coordenate and bottom right corner's coordenate;			(numpy array)
-   │  	      └── type of variable that the numpy array contains;														                                                                (dtype)
+   │  	      ├── numpy array containing a vector for each detected object with the top left corner's coordenate and bottom right corner's coordenate; (numpy array)
+   │  	      └── type of variable that the numpy array contains; (dtype)
    │
    └── "xyxyn" (array)
         └── wrapper
-              ├── numpy array containing a vector for each detected object with the top left corner's coordenate and bottom right corner's coordenate normalized;		(numpy array)
-              └── type of variable that the numpy array contains;													                                                                        	(dtype)
+              ├── numpy array containing a vector for each detected object with the top left corner's coordenate and bottom right corner's coordenate normalized; (numpy array)
+              └── type of variable that the numpy array contains; (dtype)
 ```
 
 **track**:
@@ -71,53 +71,53 @@ It's output file has the following structure:
 fileName.mat 	 (dictionary)
    ├── "cls"	 (array)
    │    └── wrapper
-   │  	      ├── numpy array containing the detected object's class; 		(numpy array)
+   │  	      ├── numpy array containing the detected object's class; (numpy array)
    │          │   (if none where detected, shows -1)
-   │  	      └── type of variable that the numpy array contains;			    (dtype)
+   │  	      └── type of variable that the numpy array contains; (dtype)
    │
    ├── "conf"	 (array)
    │    └── wrapper
-   │  	      ├── numpy array containing the detected object's confudence level;	(numpy array)
-   │  	      └── type of variable that the numpy array contains;			            (dtype)
+   │  	      ├── numpy array containing the detected object's confudence level; (numpy array)
+   │  	      └── type of variable that the numpy array contains; (dtype)
    │
    ├── "id"	(array)
    │    └── wrapper
-   │  	      ├── numpy array containing the detected object's ids;			(numpy array)
-   │  	      └── type of variable that the numpy array contains;			  (dtype)
+   │  	      ├── numpy array containing the detected object's ids; (numpy array)
+   │  	      └── type of variable that the numpy array contains; (dtype)
    │
    ├── "data"(array)
    │    └── wrapper
    │  	      ├── numpy array containing the raw tensor with detection boxes and associated data;	(numpy array)
-   │  	      └── type of variable that the numpy array contains;					                        (dtype)
+   │  	      └── type of variable that the numpy array contains; (dtype)
    ├── "is_track" (array)
    │    └── wrapper
    │  	      ├── numpy array containing a 1 if tracking is on and 0 if else; (numpy array)
-   │  	      └── type of variable that the numpy array contains;					    (dtype)
+   │  	      └── type of variable that the numpy array contains; (dtype)
    │
    ├── "orig_shape"	(array)
    │    └── wrapper
-   │  	      ├── numpy array containing an array containing the original image shape;		(numpy array)
-   │  	      └── type of variable that the numpy array contains;					                (dtype)
+   │  	      ├── numpy array containing an array containing the original image shape; (numpy array)
+   │  	      └── type of variable that the numpy array contains; (dtype)
    │
    ├── "xywh"	(array)
    │    └── wrapper
-   │  	      ├── numpy array containing a vector for each detected object with the center point's coordenates and the width and hight of the respective rectangle;		(numpy array)
-   │  	      └── type of variable that the numpy array contains;													                                                                          	(dtype)
+   │  	      ├── numpy array containing a vector for each detected object with the center point's coordenates and the width and hight of the respective rectangle; (numpy array)
+   │  	      └── type of variable that the numpy array contains; (dtype)
    │
    ├── "xywhn"	(array)
    │    └── wrapper
-   │  	      ├── numpy array containing a vector for each detected object with the center point's coordenates and the width and hight of the respective rectangle normalized;(numpy array)
-   │  	      └── type of variable that the numpy array contains;													                                                                                  	(dtype)
+   │  	      ├── numpy array containing a vector for each detected object with the center point's coordenates and the width and hight of the respective rectangle normalized; (numpy array)
+   │  	      └── type of variable that the numpy array contains; (dtype)
    │
    ├── "xyxy"	(array)
    │    └── wrapper
-   │  	      ├── numpy array containing a vector for each detected object with the top left corner's coordenate and bottom right corner's coordenate;			(numpy array)
-   │  	      └── type of variable that the numpy array contains;														                                                                (dtype)
+   │  	      ├── numpy array containing a vector for each detected object with the top left corner's coordenate and bottom right corner's coordenate; (numpy array)
+   │  	      └── type of variable that the numpy array contains; (dtype)
    │
    └── "xyxyn" (array)
         └── wrapper
-              ├── numpy array containing a vector for each detected object with the top left corner's coordenate and bottom right corner's coordenate normalized;		(numpy array)
-              └── type of variable that the numpy array contains;													                                                                        	(dtype)
+              ├── numpy array containing a vector for each detected object with the top left corner's coordenate and bottom right corner's coordenate normalized; (numpy array)
+              └── type of variable that the numpy array contains; (dtype)
 ```
 
 **plot**:
@@ -126,7 +126,7 @@ The output file has the following structure:
 
 ```
 imgMatFile.mat 	 (dictionary)
-   ├── "im"	 (numpy array)
+   ├── "im" (numpy array)
    │    └── The ploted image.
    │
    └── "session_hash"
