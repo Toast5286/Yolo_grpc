@@ -10,7 +10,7 @@ All YOLO functions are stored in the "YoloService.py" file. It contains 3 main f
 Used to run the model.predict() function from ultralytics. It expects to receive a datafile variable that is a binary .mat file (containing the image to be analyzed) and a model (based on the ultralytics models). It outputs a .mat file containing the class index, the confidence levels, data, ids, 'is_track', image shape, xywh, xyxy and there normalized variants.
 It's output file has the following structure:
 
-```bash
+```
 fileName.mat 	 (dictionary)
    ├── "cls"	 (array)
    │    └── wrapper
@@ -67,7 +67,7 @@ fileName.mat 	 (dictionary)
 Used to run the model.track() function from ultralytics. It expects to receive a datafile variable that is a binary .mat file (containing the frame to be analyzed) and a model (based on the ultralytics models). This version doesn't let the user change the type of tracker, so it uses the ByteTrack tracker as default. It outputs a .mat file containing the class index, the confidence levels, data, ids, 'is_track', image shape, xywh, xyxy and there normalized variants. 
 It's output file has the following structure:
 
-```bash
+```
 fileName.mat 	 (dictionary)
    ├── "cls"	 (array)
    │    └── wrapper
@@ -124,7 +124,7 @@ fileName.mat 	 (dictionary)
 Used to plot the predict and the track function's output. It expects to receive a .mat file containing the class index, the confidence levels, ids, xyxy (same structure as in track/predict) and another .mat file containing the original image (mandetory) and it's user's session hash (optional). It outputs a .mat file containing the plotted image. If any of these informations are missing, will return the original image.
 The output file has the following structure:
 
-```bash
+```
 imgMatFile.mat 	 (dictionary)
    ├── "im"	 (numpy array)
    │    └── The ploted image.
