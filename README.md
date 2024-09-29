@@ -5,6 +5,7 @@ A box with some yolo functions for GRPC.
 ## YOLO functions
 
 All YOLO functions are stored in the "YoloService.py" file. It contains 3 main functions. 
+The resulting output file from predict and track have the same atributes as results class from ultralytic. More details here: https://docs.ultralytics.com/reference/engine/results/#ultralytics.engine.results.Results
 
 **predict**:
 Used to run the model.predict() function from ultralytics. It expects to receive a datafile variable that is a binary .mat file (containing the image to be analyzed) and a model (based on the ultralytics models). It outputs a .mat file containing the class index, the confidence levels, data, ids, 'is_track', image shape, xywh, xyxy and there normalized variants.
@@ -15,7 +16,7 @@ fileName.mat 	 (dictionary)
    ├── "cls"	 (array)
    │    └── wrapper
    │  	      ├── numpy array containing the detected object's class; (numpy array)
-   │          │   (if none where detected, shows -1)
+   │           │   (if none where detected, shows -1)
    │  	      └── type of variable that the numpy array contains; (dtype)
    │
    ├── "conf"	 (array)
