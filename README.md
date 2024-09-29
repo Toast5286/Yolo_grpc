@@ -155,7 +155,3 @@ To run the container run the command:
 ```
 
 
-## .Mat Output File
-
-The output files for  follows the structure shown:
-
