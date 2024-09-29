@@ -5,6 +5,7 @@ A box with some yolo functions for GRPC.
 ## YOLO functions
 
 All YOLO functions are stored in the "YoloService.py" file. It contains 3 main functions. 
+
 The resulting output file from predict and track have the same atributes as results class from ultralytic. More details here: https://docs.ultralytics.com/reference/engine/results/#ultralytics.engine.results.Results
 
 **predict**:
