@@ -10,6 +10,14 @@ The resulting output file from predict and track have the same atributes as resu
 
 **predict**:
 Used to run the model.predict() function from ultralytics. It expects to receive a datafile variable that is a binary .mat file (containing the image to be analyzed) and a model (based on the ultralytics models). It outputs a .mat file containing the class index, the confidence levels, data, ids, 'is_track', image shape, xywh, xyxy and there normalized variants.
+It's input file must have the following structure:
+
+```
+input.mat (dictionary)
+  ├── ”im” - numpy array containing the saved image/frame;
+  └── ”frame” – number of the frame of uploaded image image (0 in case of a single image). If this information is not defined, default will be 0;
+```
+
 It's output file has the following structure:
 
 ```
@@ -66,7 +74,15 @@ fileName.mat 	 (dictionary)
 ```
 
 **track**:
-Used to run the model.track() function from ultralytics. It expects to receive a datafile variable that is a binary .mat file (containing the frame to be analyzed) and a model (based on the ultralytics models). This version doesn't let the user change the type of tracker, so it uses the ByteTrack tracker as default. It outputs a .mat file containing the class index, the confidence levels, data, ids, 'is_track', image shape, xywh, xyxy and there normalized variants. 
+Used to run the model.track() function from ultralytics. It expects to receive a datafile variable that is a binary .mat file (containing the frame to be analyzed) and a model (based on the ultralytics models). This version doesn't let the user change the type of tracker, so it uses the ByteTrack tracker as default. It outputs a .mat file containing the class index, the confidence levels, data, ids, 'is_track', image shape, xywh, xyxy and there normalized variants.
+It's input file must have the following structure:
+
+```
+input.mat (dictionary)
+  ├── ”im” - numpy array containing the saved image/frame;
+  └── ”frame” – number of the frame of uploaded image image (0 in case of a single image). If this information is not defined, default will be 0;
+```
+
 It's output file has the following structure:
 
 ```
@@ -124,6 +140,16 @@ fileName.mat 	 (dictionary)
 
 **plot**:
 Used to plot the predict and the track function's output. It expects to receive a .mat file containing the class index, the confidence levels, ids, xyxy (same structure as in track/predict) and another .mat file containing the original image (mandetory) and it's user's session hash (optional). It outputs a .mat file containing the plotted image. If any of these informations are missing, will return the original image.
+This function requires 2 input files, one of the outputs from the predict or track method and one with the original image.
+The file with the original image must have the following structure:
+
+```
+Img_input.mat (dictionary)
+  ├── ”im” - numpy array containing the saved image/frame;
+  └── "session_hash"
+         └── The session hash of the user that requested the image. If none was given, this will be 0.
+```
+
 The output file has the following structure:
 
 ```
