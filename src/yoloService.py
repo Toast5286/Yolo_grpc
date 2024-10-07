@@ -28,6 +28,7 @@ def predict(datafile,model):
     if not ('im' in dados):
         logging.exception(f'''[ERRO IN PREDICT: No image found in dictionary key 'im']''')
     img = dados['im']
+    img = GetJPEGImage(img)
 
     if not ('frame' in dados):
         frameNum = 0
@@ -54,9 +55,9 @@ def YOLOPredict(img,model):
     *
     * Description:  Runs predict function from the yolo model (from model variable) with the input image from img
     '''
-    image = cv2.resize(img,(640,369))
+    #image = cv2.resize(img,(640,369))
     # Run YOLOv8 prediction on the frame
-    results = model.predict(image)
+    results = model.predict(img)
 
     return results
 
@@ -76,6 +77,7 @@ def track(datafile,model):
     if not ('im' in dados):
         logging.exception(f'''[ERRO IN TRACK: No image found in dictionary key 'im']''')
     img = dados['im']
+    img = GetJPEGImage(img)
     
     if not ('frame' in dados):
         frameNum = 0
@@ -103,9 +105,9 @@ def YOLOTrack(img,model):
     * Description:  Runs track function from the yolo model (from model variable) with the input image from img
     '''
 
-    image = cv2.resize(img,(640,369))
+    #image = cv2.resize(img,(640,369))
     # Run YOLOv8 tracking on the frame, persisting tracks between frames
-    results = model.track(image, persist=True)
+    results = model.track(img, persist=True)
 
     return results
 
@@ -133,7 +135,8 @@ def plot(im,data,model):
 
     if not ('im' in imdata):
         logging.exception(f'''[ERRO IN PLOT: No image found in dictionary key 'im']''')
-    img = imdata['im']
+    JPGimg = imdata['im']
+    img = GetJPEGImage(JPGimg)
     
     if not ('session_hash' in imdata):
         session_hash = 0
@@ -141,14 +144,14 @@ def plot(im,data,model):
         session_hash = imdata['session_hash']
 
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-    img = cv2.resize(img,(640,369))
+    #img = cv2.resize(img,(640,369))
     Data = loadmat(io.BytesIO(data)) 
 
     dados = Data[list(Data)[-1]]
 
     if (dados['cls'][0][0][0][0] == -1):
         # Save the numpy array to a .mat file
-        imgMatFile = saveBinaryMat({'im': img,'session_hash':session_hash})
+        imgMatFile = saveBinaryMat({'im': JPGimg,'session_hash':session_hash})
 
         return generic_box_pb2.Data(file = imgMatFile)
 
@@ -161,7 +164,7 @@ def plot(im,data,model):
     except:
         logging.exception(f'''[WARNING IN PLOT: data from mat file did not have enough information for ploting. Returning empty image.]''')
         # Save the numpy array to a .mat file
-        imgMatFile = saveBinaryMat({'im': img,'session_hash':session_hash})
+        imgMatFile = saveBinaryMat({'im': JPGimg,'session_hash':session_hash})
         return generic_box_pb2.Data(file = imgMatFile)
 
     # Define class names
@@ -191,7 +194,7 @@ def plot(im,data,model):
 
     # Save the plot to a BytesIO object
     buf = io.BytesIO()
-    plt.savefig(buf, format='png', bbox_inches='tight', pad_inches=0)
+    plt.savefig(buf, format='JPEG', bbox_inches='tight', pad_inches=0)
     buf.seek(0)
 
     # Convert the plot to a numpy array
@@ -270,3 +273,47 @@ def saveBinaryMat(dic):
     os.remove(str(list(dic)[-1])+"data.mat")
 
     return bytesData
+
+def SaveJPEGImage(input_image):
+    '''
+    * Function:     SaveJPEGImage
+    * Arguments:    input_image                             -The image to save in JPEG format
+
+    *               
+    * Returns:      jpeg_image_array                        -The image in JPEG format
+    *
+    * Description: Saves numpy array in to a JPEG format
+    '''
+    #Save image in JPEG format in memory buffer
+    jpeg_image_io = io.BytesIO()  # In-memory buffer
+    image = Image.fromarray(input_image)
+    image.save(jpeg_image_io, format='JPEG')
+    
+    #Get the JPEG encoded bytes
+    jpeg_image_bytes = jpeg_image_io.getvalue()
+
+    #Convert the bytes to a numpy array for saving into .mat
+    jpeg_image_array = np.frombuffer(jpeg_image_bytes, dtype=np.uint8)
+
+    return jpeg_image_array 
+
+def GetJPEGImage(JPEGImage):
+    '''
+    * Function:     GetJPEGImage
+    * Arguments:    JPEGImage                               -The image in JPEG format to convert to numpy array
+
+    *               
+    * Returns:      image_array                             -The image in numpy array
+    *
+    * Description: Get's the numpy array of a JPEG encoded image
+    '''
+    jpeg_image_array = JPEGImage.flatten()  # Ensure it's a flat array of bytes
+
+    #Convert the byte array back into a BytesIO object
+    jpeg_image_io = io.BytesIO(jpeg_image_array)
+
+    #Open the image using PIL (decode the JPEG)
+    decoded_image = Image.open(jpeg_image_io)
+    image_array = np.array(decoded_image)
+
+    return image_array
