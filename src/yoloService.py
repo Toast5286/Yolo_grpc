@@ -105,9 +105,9 @@ def YOLOTrack(img,model):
     * Description:  Runs track function from the yolo model (from model variable) with the input image from img
     '''
 
-    #image = cv2.resize(img,(640,369))
+    image = cv2.resize(img,(640,369))
     # Run YOLOv8 tracking on the frame, persisting tracks between frames
-    results = model.track(img, persist=True)
+    results = model.track(image, persist=True)
 
     return results
 
@@ -144,7 +144,6 @@ def plot(im,data,model):
         session_hash = imdata['session_hash']
 
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-    #img = cv2.resize(img,(640,369))
     Data = loadmat(io.BytesIO(data)) 
 
     dados = Data[list(Data)[-1]]
@@ -161,6 +160,9 @@ def plot(im,data,model):
         conf = dados['conf'][0][0][0]  # Confidence scores
         cls = dados['cls'][0][0][0]     # Class indices 
         ids = dados['id'][0][0][0]
+        shape = dados['orig_shape'][0][0][0]
+        shape = np.flip(shape)
+        img = cv2.resize(img,shape)
     except:
         logging.exception(f'''[WARNING IN PLOT: data from mat file did not have enough information for ploting. Returning empty image.]''')
         # Save the numpy array to a .mat file
