@@ -180,4 +180,5 @@ To run the container run the command:
     docker run -p 8061:8061 -it --rm yolo_grpc
 ```
 
+Afterwards, you can run "test_generic_box.ipynb". The output Yolo data will be stored in a "imback.mat".
 
