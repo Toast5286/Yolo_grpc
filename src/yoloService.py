@@ -54,9 +54,9 @@ def YOLOPredict(img,model):
     *
     * Description:  Runs predict function from the yolo model (from model variable) with the input image from img
     '''
-    image = cv2.resize(img,(640,369))
+    #image = cv2.resize(img,(640,369))
     # Run YOLOv8 prediction on the frame
-    results = model.predict(image)
+    results = model.predict(img)
 
     return results
 
