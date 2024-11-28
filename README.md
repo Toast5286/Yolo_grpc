@@ -1,6 +1,6 @@
 # Yolo_grpc
 
-A box with some yolo functions for GRPC.
+A grpc-pipeline element designed to run some yolo functions. This element was designed to be part of a pipeline, therefore does not have any UI. Can be tested using the "test_generic_box.ipynb" file.
 
 ## YOLO functions
 
@@ -163,21 +163,28 @@ imgMatFile.mat 	 (dictionary)
 
 ## Deploy
 
-To deploy this program it needes to compile the GRPC with the folowing command:
+To deploy this program it needes to compile the GRPC with the folowing command.
 
-```bash
-  python -m grpc_tools.protoc --proto_path=./protos --python_out=. --grpc_python_out=. generic_box.proto
-```
 To create the Docker image with the program use:
 
 ```bash
     docker build -t yolo_grpc --build-arg SERVICE_NAME=generic_box -f docker/Dockerfile .
 ```
 
+After this, just run the pipeline (Instructions are on the pipeline's repository).
+
+In case you want to test this pipeline element, follow the next instructions.
+
 To run the container run the command:
 
 ```bash
     docker run -p 8061:8061 -it --rm yolo_grpc
+```
+
+To test this pipeline element, it needs the grpc message types. All the grpc functions are stored in the "generic_box_pb2.py" and "generic_box_pb2_grpc.py". To get these files we run:
+
+```bash
+  python -m grpc_tools.protoc --proto_path=./protos --python_out=. --grpc_python_out=. generic_box.proto
 ```
 
 Afterwards, you can run "test_generic_box.ipynb". The output Yolo data will be stored in a "imback.mat".
