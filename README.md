@@ -163,8 +163,6 @@ imgMatFile.mat 	 (dictionary)
 
 ## Deploy
 
-To deploy this program it needes to compile the GRPC with the folowing command.
-
 To create the Docker image with the program use:
 
 ```bash
